@@ -1,0 +1,14 @@
+# Your stock watchlist
+# One stock per line
+# NSE stocks end with .NS  |  BSE stocks end with .BO
+# Lines starting with # are ignored (comments)
+
+# Large caps
+RELIANCE.NS
+TATASTEEL.NS
+HDFCBANK.NS
+INFY.NS
+ICICIBANK.N
+
+# Mid caps (add your own below)
+# ATHERENERG.NS

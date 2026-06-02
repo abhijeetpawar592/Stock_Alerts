@@ -1,0 +1,44 @@
+name: Daily Stock Alert
+
+on:
+  schedule:
+    # Runs at 9:30 AM IST every weekday (IST = UTC+5:30, so 4:00 AM UTC)
+    - cron: '0 4 * * 1-5'
+
+  # Also lets you run it manually from GitHub with a button click
+  workflow_dispatch:
+
+jobs:
+  run-alert:
+    runs-on: ubuntu-latest
+
+    # Give the job permission to write files back to the repo
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install required libraries
+        run: pip install yfinance requests
+
+      - name: Run stock alert script
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python alert.py
+
+      # ── Save the dashboard file back into the repo ──
+      - name: Commit and push dashboard
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add dashboard.html
+          git diff --cached --quiet || git commit -m "chore: update dashboard $(date +'%Y-%m-%d')"
+          git push

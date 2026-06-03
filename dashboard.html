@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stock Dashboard</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:       #ffffff;
+    --bg2:      #f7f6f2;
+    --bg3:      #f0ede7;
+    --border:   rgba(0,0,0,0.10);
+    --border2:  rgba(0,0,0,0.06);
+    --text:     #1a1a18;
+    --text2:    #5a5a55;
+    --text3:    #9a9a94;
+    --up:       #27500a;
+    --down:     #a32d2d;
+    --radius:   10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:     #18181a;
+      --bg2:    #222224;
+      --bg3:    #2a2a2c;
+      --border: rgba(255,255,255,0.10);
+      --border2:rgba(255,255,255,0.05);
+      --text:   #e8e6df;
+      --text2:  #9a9892;
+      --text3:  #5a5a55;
+      --up:     #7abf44;
+      --down:   #e87070;
+    }
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); font-size: 14px; padding: 24px 20px; }
+  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+  h1 { font-size: 20px; font-weight: 600; }
+  .meta { font-size: 12px; color: var(--text3); margin-top: 4px; }
+  .stats { display: flex; gap: 12px; flex-wrap: wrap; }
+  .stat { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 10px 16px; text-align: center; min-width: 90px; }
+  .stat-num { font-size: 22px; font-weight: 600; }
+  .stat-label { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
+  .leg { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); }
+  .leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .table-wrap { overflow-x: auto; border: 0.5px solid var(--border); border-radius: var(--radius); }
+  table { width: 100%; border-collapse: collapse; min-width: 750px; }
+  thead tr { background: var(--bg2); }
+  th { font-size: 11px; font-weight: 600; color: var(--text3); text-align: left; padding: 10px 14px; border-bottom: 0.5px solid var(--border); white-space: nowrap; text-transform: uppercase; letter-spacing: 0.04em; }
+  td { padding: 12px 14px; border-bottom: 0.5px solid var(--border2); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg3); }
+  .ticker { font-weight: 600; font-size: 14px; white-space: nowrap; }
+  .exchange { font-size: 10px; color: var(--text3); font-weight: 400; margin-left: 2px; }
+  .sub { font-size: 10px; color: var(--text3); margin-top: 2px; }
+  .up { color: var(--up); font-weight: 500; }
+  .down { color: var(--down); font-weight: 500; }
+  .vol-high { color: #ba7517; font-weight: 600; }
+  .sig { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; margin: 2px 2px 2px 0; white-space: nowrap; }
+  .sig-green { background: #eaf3de; color: #27500a; }
+  .sig-red   { background: #fcebeb; color: #a32d2d; }
+  .sig-orange{ background: #faeeda; color: #633806; }
+  .sig-blue  { background: #e6f1fb; color: #0c447c; }
+  .sig-none  { background: var(--bg2); color: var(--text3); border: 0.5px solid var(--border); }
+  @media (prefers-color-scheme: dark) {
+    .sig-green  { background: #1a3008; color: #7abf44; }
+    .sig-red    { background: #3a0f0f; color: #e87070; }
+    .sig-orange { background: #3a2000; color: #e09040; }
+    .sig-blue   { background: #0a2040; color: #60a8e8; }
+  }
+  footer { margin-top: 20px; font-size: 11px; color: var(--text3); text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>Stock watchlist dashboard</h1>
+    <div class="meta">Last updated: Wed 03 Jun 2026, 06:38 PM IST &nbsp;·&nbsp; 0 stocks tracked</div>
+  </div>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">0</div>
+      <div class="stat-label">Stocks</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="color:var(--up)">0</div>
+      <div class="stat-label">Near 52W high</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="color:var(--down)">0</div>
+      <div class="stat-label">Near 52W low</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="color:#ba7517">0</div>
+      <div class="stat-label">Vol spikes</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="color:#0c447c">0</div>
+      <div class="stat-label">Breakouts</div>
+    </div>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="leg"><div class="leg-dot" style="background:#639922"></div> Near 52W high (within 5%)</div>
+  <div class="leg"><div class="leg-dot" style="background:#e24b4a"></div> Near 52W low (within 5%)</div>
+  <div class="leg"><div class="leg-dot" style="background:#ef9f27"></div> Volume spike (&gt;1.5x avg)</div>
+  <div class="leg"><div class="leg-dot" style="background:#378add"></div> Multi-year breakout</div>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Stock</th>
+        <th>Price (&#8377;)</th>
+        <th>Day change</th>
+        <th>52W high</th>
+        <th>% from high</th>
+        <th>52W low</th>
+        <th>% from low</th>
+        <th>Volume</th>
+        <th>Signals</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+    </tbody>
+  </table>
+</div>
+
+<footer>Data from Yahoo Finance via yfinance &nbsp;·&nbsp; Auto-refreshed every weekday at 9:30 AM IST &nbsp;·&nbsp; Not financial advice</footer>
+
+</body>
+</html>

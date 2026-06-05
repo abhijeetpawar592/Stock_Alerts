@@ -11,4 +11,4 @@ INFY.NS
 ICICIBANK.N
 
 # Mid caps (add your own below)
-# ATHERENERG.NS
+ATHERENERG.NS

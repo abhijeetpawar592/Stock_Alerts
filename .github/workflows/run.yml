@@ -2,23 +2,20 @@ name: Daily Stock Alert
 
 on:
   schedule:
-    # Runs at 9:30 AM IST every weekday (IST = UTC+5:30, so 4:00 AM UTC)
     - cron: '0 4 * * 1-5'
-
-  # Also lets you run it manually from GitHub with a button click
   workflow_dispatch:
 
 jobs:
   run-alert:
     runs-on: ubuntu-latest
-
-    # Give the job permission to write files back to the repo
     permissions:
       contents: write
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -34,12 +31,13 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python alert.py
 
-      # ── Save the dashboard file back into the repo ──
       - name: Commit and push dashboard
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase origin main
+          git stash --include-untracked
+          git pull origin main --rebase
+          git stash pop
           git add dashboard.html
           git diff --cached --quiet || git commit -m "chore: update dashboard $(date +'%Y-%m-%d')"
-          git push
+          git push origin main

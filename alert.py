@@ -7,8 +7,8 @@ from datetime import datetime, timedelta
 # ─────────────────────────────────────────
 #  YOUR SETTINGS — fill these in
 # ─────────────────────────────────────────
-TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "PASTE_YOUR_BOT_TOKEN_HERE")
-TELEGRAM_CHAT_ID   = os.environ.get("TELEGRAM_CHAT_ID",   "PASTE_YOUR_CHAT_ID_HERE")
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "8571728915:AAGrp2iMpEpOQ5skjrslln6dwpvX-C_V9io")
+TELEGRAM_CHAT_ID   = os.environ.get("TELEGRAM_CHAT_ID",   "892193947")
 
 # How many years back to check for breakout?
 BREAKOUT_YEARS = [1, 3, 5]
